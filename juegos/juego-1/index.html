@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f4f4">
+  <title>Juego 1 - Bit Runner</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="stage">
+    <div class="screen">
+      <div class="toolbar">
+        <a class="back" href="../../index.html" aria-label="Volver al menu de juegos" title="Volver al menu">
+          <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><polygon points="2,8 8,2 8,14"/><rect x="8" y="6" width="6" height="4"/></svg>
+          <span>MENU</span>
+        </a>
+        <button id="btn-sound" class="tool" type="button" aria-label="Sonido (M)" title="Sonido (M)">
+          <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges">
+            <rect x="1" y="6" width="3" height="4"/>
+            <rect x="4" y="5" width="1" height="6"/>
+            <rect x="5" y="4" width="1" height="8"/>
+            <rect x="6" y="3" width="1" height="10"/>
+            <g class="waves">
+              <rect x="9" y="6" width="1" height="4"/>
+              <rect x="11" y="4" width="1" height="8"/>
+              <rect x="13" y="2" width="1" height="12"/>
+            </g>
+            <g class="cross">
+              <rect x="9" y="5" width="1" height="1"/>
+              <rect x="10" y="6" width="1" height="1"/>
+              <rect x="11" y="7" width="1" height="1"/>
+              <rect x="12" y="8" width="1" height="1"/>
+              <rect x="13" y="9" width="1" height="1"/>
+              <rect x="13" y="5" width="1" height="1"/>
+              <rect x="12" y="6" width="1" height="1"/>
+              <rect x="10" y="8" width="1" height="1"/>
+              <rect x="9" y="9" width="1" height="1"/>
+            </g>
+          </svg>
+        </button>
+        <button id="btn-pause" class="tool" type="button" aria-label="Pausa (P)" title="Pausa (P)">
+          <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges">
+            <g class="bars">
+              <rect x="4" y="3" width="3" height="10"/>
+              <rect x="9" y="3" width="3" height="10"/>
+            </g>
+            <g class="play">
+              <rect x="5" y="3" width="1" height="10"/>
+              <rect x="6" y="4" width="1" height="8"/>
+              <rect x="7" y="5" width="1" height="6"/>
+              <rect x="8" y="6" width="1" height="4"/>
+              <rect x="9" y="7" width="1" height="2"/>
+            </g>
+          </svg>
+        </button>
+      </div>
+      <canvas id="game" width="600" height="150" aria-label="Juego Bit Runner"></canvas>
+    </div>
+
+    <p class="hint">ESPACIO / &uarr; SALTAR &nbsp;&middot;&nbsp; &darr; AGACHARSE &nbsp;&middot;&nbsp; &rarr; DISPARAR &nbsp;&middot;&nbsp; P PAUSA &nbsp;&middot;&nbsp; M SONIDO</p>
+
+    <!-- Controles táctiles (se muestran en teléfonos y pantallas angostas) -->
+    <div class="pad" id="pad" aria-label="Controles táctiles">
+      <button id="pad-fire" class="pad-btn" type="button">
+        <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><polygon points="14,8 4,2 4,14"/></svg>
+        <span>DISPARAR</span>
+      </button>
+      <button id="pad-jump" class="pad-btn" type="button">
+        <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><polygon points="8,2 14,12 2,12"/></svg>
+        <span>SALTAR</span>
+      </button>
+    </div>
+    <p class="rotate-hint">GIRA EL TELEFONO PARA JUGAR MAS GRANDE</p>
+
+    <p id="error" class="error" hidden></p>
+    <noscript><p class="error">Activa JavaScript en tu navegador para jugar.</p></noscript>
+  </main>
+
+  <!-- Aviso en pantalla si game.js no carga o falla -->
+  <script>
+    window.addEventListener('error', function (e) {
+      var box = document.getElementById('error');
+      if (!box) return;
+      var t = e.target;
+      if (t && t !== window && t.tagName) {
+        // Falla al cargar un recurso: solo avisamos si es un script
+        if (t.tagName !== 'SCRIPT') return;
+        box.textContent = 'NO SE PUDO CARGAR "' + t.getAttribute('src') +
+          '". REVISA QUE ESTE EN LA MISMA CARPETA QUE index.html Y SE LLAME EXACTAMENTE ASI.';
+      } else {
+        var msg = e.message && e.message !== 'Script error.' ? ': ' + e.message : '';
+        box.textContent = 'ERROR EN EL JUEGO' + msg +
+          '. ABRE LA CONSOLA (F12) PARA VER EL DETALLE.';
+      }
+      box.hidden = false;
+    }, true);
+  </script>
+
+  <script src="game.js"></script>
+</body>
+</html>
