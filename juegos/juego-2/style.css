@@ -1,0 +1,259 @@
+:root {
+  --paper: #f4f4f4;
+  --ink: #202020;
+  --muted: #8c8c8c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Press Start 2P", monospace;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+.stage {
+  width: 100%;
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* El tablero es vertical (240 x 256): el ancho tambien se limita por el alto de la pantalla */
+.screen {
+  width: min(480px, 100%, calc((100vh - 230px) * 0.9375));
+  width: min(480px, 100%, calc((100dvh - 230px) * 0.9375));
+  min-width: 200px;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  touch-action: none;
+  outline: none;
+}
+
+/* Menu, sonido y pausa */
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.tool {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--muted);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.tool svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.tool:hover,
+.back:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.back {
+  margin-right: auto;
+  height: 30px;
+  padding: 0 10px 0 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 2px solid var(--muted);
+  color: var(--muted);
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  touch-action: manipulation;
+}
+
+.back svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.tool:focus-visible,
+.back:focus-visible,
+.pad-btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.tool .cross,
+.tool .play {
+  display: none;
+}
+
+.tool.is-off .waves,
+.tool.is-paused .bars {
+  display: none;
+}
+
+.tool.is-off .cross,
+.tool.is-paused .play {
+  display: block;
+}
+
+.hint {
+  margin: 0;
+  font-size: 8px;
+  line-height: 2;
+  text-align: center;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+/* Controles tactiles */
+.pad {
+  display: none;
+  width: min(480px, 100%);
+  gap: 10px;
+  grid-template-columns: 1fr 1fr 1.25fr;
+}
+
+.pad-btn {
+  height: 66px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pad-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  pointer-events: none;
+}
+
+.pad-btn span {
+  pointer-events: none;
+}
+
+.pad-btn.is-down {
+  background: var(--muted);
+}
+
+#pad-down {
+  grid-column: 1 / 3;
+}
+
+#pad-drop {
+  grid-column: 3;
+}
+
+@media (pointer: coarse), (max-width: 760px) {
+  .hint {
+    display: none;
+  }
+
+  .pad {
+    display: grid;
+  }
+
+  .tool {
+    width: 36px;
+    height: 36px;
+  }
+
+  .back {
+    height: 36px;
+    font-size: 9px;
+  }
+}
+
+/* Celular acostado: tablero a la izquierda y botones a la derecha */
+@media (orientation: landscape) and (pointer: coarse) and (max-height: 520px) {
+  .stage {
+    min-height: 100vh;
+    min-height: 100dvh;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    padding: 6px 16px;
+  }
+
+  .screen {
+    flex: none;
+    width: calc((100vh - 64px) * 0.9375);
+    width: calc((100dvh - 64px) * 0.9375);
+  }
+
+  .pad {
+    flex: none;
+    width: min(46vw, 340px);
+  }
+
+  .pad-btn {
+    height: 62px;
+  }
+}
+
+.error {
+  margin: 0;
+  max-width: 640px;
+  font-size: 8px;
+  line-height: 1.8;
+  text-align: center;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  padding: 10px 14px;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.error[hidden] {
+  display: none;
+}
