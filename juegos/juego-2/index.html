@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f4f4">
+  <title>Juego 2 - Bit Blocks</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="stage">
+    <div class="screen">
+      <div class="toolbar">
+        <a class="back" href="../../index.html" aria-label="Volver al menu de juegos" title="Volver al menu">
+          <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><polygon points="2,8 8,2 8,14"/><rect x="8" y="6" width="6" height="4"/></svg>
+          <span>MENU</span>
+        </a>
+        <button id="btn-sound" class="tool" type="button" aria-label="Sonido (M)" title="Sonido (M)">
+          <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges">
+            <rect x="1" y="6" width="3" height="4"/>
+            <rect x="4" y="5" width="1" height="6"/>
+            <rect x="5" y="4" width="1" height="8"/>
+            <rect x="6" y="3" width="1" height="10"/>
+            <g class="waves">
+              <rect x="9" y="6" width="1" height="4"/>
+              <rect x="11" y="4" width="1" height="8"/>
+              <rect x="13" y="2" width="1" height="12"/>
+            </g>
+            <g class="cross">
+              <rect x="9" y="5" width="1" height="1"/>
+              <rect x="10" y="6" width="1" height="1"/>
+              <rect x="11" y="7" width="1" height="1"/>
+              <rect x="12" y="8" width="1" height="1"/>
+              <rect x="13" y="9" width="1" height="1"/>
+              <rect x="13" y="5" width="1" height="1"/>
+              <rect x="12" y="6" width="1" height="1"/>
+              <rect x="10" y="8" width="1" height="1"/>
+              <rect x="9" y="9" width="1" height="1"/>
+            </g>
+          </svg>
+        </button>
+        <button id="btn-pause" class="tool" type="button" aria-label="Pausa (P)" title="Pausa (P)">
+          <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges">
+            <g class="bars">
+              <rect x="4" y="3" width="3" height="10"/>
+              <rect x="9" y="3" width="3" height="10"/>
+            </g>
+            <g class="play">
+              <rect x="5" y="3" width="1" height="10"/>
+              <rect x="6" y="4" width="1" height="8"/>
+              <rect x="7" y="5" width="1" height="6"/>
+              <rect x="8" y="6" width="1" height="4"/>
+              <rect x="9" y="7" width="1" height="2"/>
+            </g>
+          </svg>
+        </button>
+      </div>
+      <canvas id="game" width="240" height="256" aria-label="Juego Bit Blocks"></canvas>
+    </div>
+
+    <p class="hint">&larr; &rarr; MOVER &nbsp;&middot;&nbsp; &uarr; / Z GIRAR &nbsp;&middot;&nbsp; &darr; BAJAR &nbsp;&middot;&nbsp; ESPACIO CAER<br>P PAUSA &nbsp;&middot;&nbsp; M SONIDO</p>
+
+    <!-- Controles tactiles (se muestran en telefonos y pantallas angostas) -->
+    <div class="pad" id="pad" aria-label="Controles tactiles">
+      <button id="pad-left" class="pad-btn" type="button">
+        <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><polygon points="2,8 12,2 12,14"/></svg>
+        <span>IZQ</span>
+      </button>
+      <button id="pad-right" class="pad-btn" type="button">
+        <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><polygon points="14,8 4,2 4,14"/></svg>
+        <span>DER</span>
+      </button>
+      <button id="pad-rotate" class="pad-btn" type="button">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8A4.5 4.5 0 1 1 12.5 8A4.5 4.5 0 0 1 8 12.5" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="8,9.5 8,15.5 4,12.5"/></svg>
+        <span>GIRAR</span>
+      </button>
+      <button id="pad-down" class="pad-btn" type="button">
+        <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><polygon points="8,13 14,4 2,4"/></svg>
+        <span>BAJAR</span>
+      </button>
+      <button id="pad-drop" class="pad-btn" type="button">
+        <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><polygon points="8,11 13,5 9.5,5 9.5,1 6.5,1 6.5,5 3,5"/><rect x="2" y="13" width="12" height="2"/></svg>
+        <span>CAER</span>
+      </button>
+    </div>
+
+    <p id="error" class="error" hidden></p>
+    <noscript><p class="error">Activa JavaScript en tu navegador para jugar.</p></noscript>
+  </main>
+
+  <!-- Aviso en pantalla si game.js no carga o falla -->
+  <script>
+    window.addEventListener('error', function (e) {
+      var box = document.getElementById('error');
+      if (!box) return;
+      var t = e.target;
+      if (t && t !== window && t.tagName) {
+        // Falla al cargar un recurso: solo avisamos si es un script
+        if (t.tagName !== 'SCRIPT') return;
+        box.textContent = 'NO SE PUDO CARGAR "' + t.getAttribute('src') +
+          '". REVISA QUE ESTE EN LA MISMA CARPETA QUE index.html Y SE LLAME EXACTAMENTE ASI.';
+      } else {
+        var msg = e.message && e.message !== 'Script error.' ? ': ' + e.message : '';
+        box.textContent = 'ERROR EN EL JUEGO' + msg +
+          '. ABRE LA CONSOLA (F12) PARA VER EL DETALLE.';
+      }
+      box.hidden = false;
+    }, true);
+  </script>
+
+  <script src="game.js"></script>
+</body>
+</html>
