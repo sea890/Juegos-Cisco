@@ -3,6 +3,7 @@
   --azul-muro: #2121de;
   --amarillo: #ffff00;
   --texto: #9a9ad8;
+  --ancho: min(100vw, calc((100vh - 110px) * 448 / 576));   /* ancho del juego (proporción 448 x 576) */
   color-scheme: dark;
 }
 
@@ -28,14 +29,45 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
 }
 
-/* Proporción del canvas: 448 x 576 (28 x 36 casillas de 16 px) */
+.barra {
+  width: var(--ancho);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.volver {
+  font-size: 12px;
+  color: var(--texto);
+  text-decoration: none;
+  padding: 8px 0;
+}
+.volver:hover, .volver:focus-visible { color: #fff; }
+
+.botones { display: flex; gap: 8px; }
+
+.botones button {
+  min-height: 36px;
+  padding: 0 12px;
+  font: bold 12px "Courier New", monospace;
+  color: var(--amarillo);
+  background: var(--negro);
+  border: 2px solid var(--azul-muro);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.botones button:hover, .botones button:focus-visible { background: var(--azul-muro); color: #fff; outline: none; }
+.botones button:active { transform: translateY(1px); }
+
 #game {
   display: block;
-  width: min(100vw, calc((100vh - 40px) * 448 / 576));
+  width: var(--ancho);
   height: auto;
   aspect-ratio: 448 / 576;
   background: var(--negro);
@@ -56,4 +88,5 @@ body {
 
 @media (max-width: 520px) {
   .hint { font-size: 11px; }
+  .botones button { padding: 0 8px; font-size: 11px; }
 }
