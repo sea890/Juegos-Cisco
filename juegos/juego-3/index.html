@@ -8,8 +8,15 @@
 </head>
 <body>
   <main class="cabinet">
+    <div class="barra">
+      <a class="volver" href="../../index.html">&larr; MENU</a>
+      <span class="botones">
+        <button id="btn-pausa" type="button">PAUSA</button>
+        <button id="btn-sonido" type="button">SONIDO: SI</button>
+      </span>
+    </div>
     <canvas id="game" aria-label="Juego Pac-Man"></canvas>
-    <p class="hint">Flechas / WASD para mover · P pausa · En móvil: desliza para girar</p>
+    <p class="hint">Flechas / WASD mover · P pausa · M sonido · En móvil: desliza para girar</p>
   </main>
   <script src="game.js"></script>
 </body>
