@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f4f4">
+  <title>Galeria de juegos</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+  <main class="menu">
+    <header class="head">
+      <h1 class="title">GALERIA DE JUEGOS</h1>
+      <p class="sub">ELIGE UN JUEGO<span class="cursor" aria-hidden="true">_</span></p>
+    </header>
+
+    <nav class="lista" id="lista" aria-label="Juegos"></nav>
+
+    <p class="hint">&uarr; &darr; ELEGIR &nbsp;&middot;&nbsp; ENTER JUGAR &nbsp;&middot;&nbsp; O PULSA EL NUMERO DEL JUEGO</p>
+
+    <p id="error" class="error" hidden></p>
+    <noscript>
+      <p class="error">Activa JavaScript para ver el menu. Mientras tanto: <a href="juegos/juego-1/index.html">JUEGO 1</a></p>
+    </noscript>
+  </main>
+
+  <!-- Aviso en pantalla si un archivo no carga o falla -->
+  <script>
+    window.addEventListener('error', function (e) {
+      var box = document.getElementById('error');
+      if (!box) return;
+      var t = e.target;
+      if (t && t !== window && t.tagName) {
+        if (t.tagName !== 'SCRIPT') return;
+        box.textContent = 'NO SE PUDO CARGAR "' + t.getAttribute('src') +
+          '". REVISA QUE ESTE EN LA MISMA CARPETA QUE index.html Y SE LLAME EXACTAMENTE ASI.';
+      } else {
+        var msg = e.message && e.message !== 'Script error.' ? ': ' + e.message : '';
+        box.textContent = 'ERROR EN EL MENU' + msg + '. ABRE LA CONSOLA (F12) PARA VER EL DETALLE.';
+      }
+      box.hidden = false;
+    }, true);
+  </script>
+
+  <script src="juegos.js"></script>
+  <script src="menu.js"></script>
+</body>
+</html>
